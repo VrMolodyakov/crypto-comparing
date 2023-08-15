@@ -1,21 +1,41 @@
 package client
 
-type Order struct {
-	Price     string `json:"price"`
-	Quantity  string `json:"quantity"`
-	Timestamp int64  `json:"timestamp"`
+type BtcUsdTrades struct {
+	Error  []interface{} `json:"error"`
+	Result struct {
+		XXBTZUSD struct {
+			Asks [][]interface{} `json:"asks"`
+			Bids [][]interface{} `json:"bids"`
+		} `json:"XXBTZUSD"`
+	} `json:"result"`
 }
 
-type OrderBook struct {
-	Asks []Order `json:"asks"`
-	Bids []Order `json:"bids"`
+type EthUsdTrades struct {
+	Error  []interface{} `json:"error"`
+	Result struct {
+		XXBTZUSD struct {
+			Asks [][]interface{} `json:"asks"`
+			Bids [][]interface{} `json:"bids"`
+		} `json:"XETHZUSD"`
+	} `json:"result"`
 }
 
-type Result struct {
-	OrderBook map[string]OrderBook `json:"result"`
+type TetherUsdTrades struct {
+	Error  []interface{} `json:"error"`
+	Result struct {
+		XXBTZUSD struct {
+			Asks [][]interface{} `json:"asks"`
+			Bids [][]interface{} `json:"bids"`
+		} `json:"USDTZUSD"`
+	} `json:"result"`
 }
 
-type Response struct {
-	Error  []string `json:"error"`
-	Result Result   `json:"result"`
+type XrpUsdTrades struct {
+	Error  []interface{} `json:"error"`
+	Result struct {
+		XXBTZUSD struct {
+			Asks [][]interface{} `json:"asks"`
+			Bids [][]interface{} `json:"bids"`
+		} `json:"XXRPZUSD"`
+	} `json:"result"`
 }
