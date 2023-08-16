@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/VrMolodyakov/crypto-comparing/kraken/internal/app"
-	"github.com/VrMolodyakov/crypto-comparing/kraken/internal/http/client"
+	"github.com/VrMolodyakov/crypto-comparing/kraken/internal/domain/currency/api"
 )
 
 func main() {
@@ -18,10 +18,13 @@ func main() {
 	}
 
 	a.InitLogger()
-	api := client.New(a.Logger, 5*time.Second)
-	dto, err := api.GetBtcRecentTrades()
+	apiClient := api.New(5 * time.Second)
+	trades, err := apiClient.GetTetherRecentTrades(2)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(dto)
+	for _, trade := range trades {
+		fmt.Println(trade)
+	}
+
 }

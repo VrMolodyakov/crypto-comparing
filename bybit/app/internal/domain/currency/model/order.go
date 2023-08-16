@@ -9,4 +9,6 @@ type TradeInfo struct {
 	Timestamp time.Time
 	Buy       bool
 	Sell      bool
+	Market    bool
+	Limit     bool
 }

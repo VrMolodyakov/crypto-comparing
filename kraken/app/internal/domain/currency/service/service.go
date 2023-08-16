@@ -5,22 +5,38 @@ import (
 	"github.com/VrMolodyakov/crypto-comparing/kraken/pkg/logging"
 )
 
-type CurrencyClient interface {
-	GetOrderBook()
+type CryptocurrencyClient interface {
+	GetBtcRecentTrades(count int) ([]model.TradeInfo, error)
+	GetEthRecentTrades(count int) ([]model.TradeInfo, error)
+	GetTetherRecentTrades(count int) ([]model.TradeInfo, error)
+	GetXrpRecentTrades(count int) ([]model.TradeInfo, error)
 }
 
-type currencyInfo struct {
+type service struct {
 	logger logging.Logger
-	client CurrencyClient
+	client CryptocurrencyClient
 }
 
-func New(client CurrencyClient, logger logging.Logger) *currencyInfo {
-	return &currencyInfo{
+func NewCryptocurrencyService(client CryptocurrencyClient, logger logging.Logger) *service {
+	return &service{
 		client: client,
 		logger: logger,
 	}
 }
 
-func (c *currencyInfo) GetOrderBook() []model.Order {
-	return nil
+func (s *service) GetBtcTrades(count int) ([]model.TradeInfo, error) {
+	s.logger.Debugf("try to get btc trades with count = %d", count)
+	return s.client.GetBtcRecentTrades(count)
+}
+func (s *service) GetEthTrades(count int) ([]model.TradeInfo, error) {
+	s.logger.Debugf("try to get ethereum trades with count = %d", count)
+	return s.client.GetEthRecentTrades(count)
+}
+func (s *service) GetTetherTrades(count int) ([]model.TradeInfo, error) {
+	s.logger.Debugf("try to get tether trades with count = %d", count)
+	return s.client.GetTetherRecentTrades(count)
+}
+func (s *service) GetXrpTrades(count int) ([]model.TradeInfo, error) {
+	s.logger.Debugf("try to get xrp trades with count = %d", count)
+	return s.client.GetXrpRecentTrades(count)
 }
