@@ -19,37 +19,76 @@ const (
 type BtcUsdTrades struct {
 	Error  []interface{} `json:"error"`
 	Result struct {
-		XXBTZUSD [][]interface{} `json:"XXBTZUSD"`
+		XBTUSDT [][]interface{} `json:"XBTUSDT"`
 	} `json:"result"`
 }
 
 type EthUsdTrades struct {
 	Error  []interface{} `json:"error"`
 	Result struct {
-		XETHZUSD [][]interface{} `json:"XETHZUSD"`
+		ETHUSDT [][]interface{} `json:"ETHUSDT"`
 	} `json:"result"`
 }
 
 type TetherUsdTrades struct {
 	Error  []interface{} `json:"error"`
 	Result struct {
-		USDTZUSD [][]interface{} `json:"USDTZUSD"`
+		XDGUSDT [][]interface{} `json:"XDGUSDT"`
 	} `json:"result"`
 }
 
 type XrpUsdTrades struct {
 	Error  []interface{} `json:"error"`
 	Result struct {
-		XXRPZUSD [][]interface{} `json:"XXRPZUSD"`
+		XRPUSDT [][]interface{} `json:"XRPUSDT"`
 	} `json:"result"`
 }
 
 func (t *BtcUsdTrades) Validate() error {
-	count := len(t.Result.XXBTZUSD)
+	count := len(t.Result.XBTUSDT)
 	if count == 0 {
 		return errors.New("empty data")
 	}
-	for _, tradeInfo := range t.Result.XXBTZUSD {
+	for _, tradeInfo := range t.Result.XBTUSDT {
+		if n := len(tradeInfo); n != apiResponseContentLength {
+			return errors.New("incorrect response array length")
+		}
+	}
+	return nil
+}
+
+func (t *EthUsdTrades) Validate() error {
+	count := len(t.Result.ETHUSDT)
+	if count == 0 {
+		return errors.New("empty data")
+	}
+	for _, tradeInfo := range t.Result.ETHUSDT {
+		if n := len(tradeInfo); n != apiResponseContentLength {
+			return errors.New("incorrect response array length")
+		}
+	}
+	return nil
+}
+
+func (t *TetherUsdTrades) Validate() error {
+	count := len(t.Result.XDGUSDT)
+	if count == 0 {
+		return errors.New("empty data")
+	}
+	for _, tradeInfo := range t.Result.XDGUSDT {
+		if n := len(tradeInfo); n != apiResponseContentLength {
+			return errors.New("incorrect response array length")
+		}
+	}
+	return nil
+}
+
+func (t *XrpUsdTrades) Validate() error {
+	count := len(t.Result.XRPUSDT)
+	if count == 0 {
+		return errors.New("empty data")
+	}
+	for _, tradeInfo := range t.Result.XRPUSDT {
 		if n := len(tradeInfo); n != apiResponseContentLength {
 			return errors.New("incorrect response array length")
 		}
@@ -71,7 +110,7 @@ func ConvertToInfo(trade []any) (model.TradeInfo, error) {
 
 	return model.TradeInfo{
 		Price:     price,
-		Volume:    volume,
+		Size:      volume,
 		Timestamp: time.Unix(int64(trade[2].(float64)), 0),
 		Buy:       trade[3].(string) == BUY,
 		Sell:      trade[3].(string) == SELL,

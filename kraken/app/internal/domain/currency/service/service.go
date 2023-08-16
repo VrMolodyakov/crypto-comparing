@@ -8,7 +8,7 @@ import (
 type CryptocurrencyClient interface {
 	GetBtcRecentTrades(count int) ([]model.TradeInfo, error)
 	GetEthRecentTrades(count int) ([]model.TradeInfo, error)
-	GetTetherRecentTrades(count int) ([]model.TradeInfo, error)
+	GetDogeRecentTrades(count int) ([]model.TradeInfo, error)
 	GetXrpRecentTrades(count int) ([]model.TradeInfo, error)
 }
 
@@ -34,7 +34,7 @@ func (s *service) GetEthTrades(count int) ([]model.TradeInfo, error) {
 }
 func (s *service) GetTetherTrades(count int) ([]model.TradeInfo, error) {
 	s.logger.Debugf("try to get tether trades with count = %d", count)
-	return s.client.GetTetherRecentTrades(count)
+	return s.client.GetDogeRecentTrades(count)
 }
 func (s *service) GetXrpTrades(count int) ([]model.TradeInfo, error) {
 	s.logger.Debugf("try to get xrp trades with count = %d", count)

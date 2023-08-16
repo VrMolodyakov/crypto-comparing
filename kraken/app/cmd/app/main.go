@@ -19,7 +19,7 @@ func main() {
 
 	a.InitLogger()
 	apiClient := api.New(5 * time.Second)
-	trades, err := apiClient.GetTetherRecentTrades(2)
+	trades, err := apiClient.GetDogeRecentTrades(2)
 	if err != nil {
 		log.Fatal(err)
 	}

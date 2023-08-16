@@ -11,10 +11,10 @@ import (
 )
 
 const (
-	Bitcoin  string = "XBTUSD"
-	Ethereum string = "XETHZUSD"
-	Tether   string = "USDTZUSD"
-	Xrp      string = "XXRPZUSD"
+	Bitcoin  string = "BTCUSDT"
+	Ethereum string = "ETHUSDT"
+	Doge     string = "DOGEUSDT"
+	Xrp      string = "XRPUSDT"
 	baseURL  string = "https://api.bybit.com/v5/market/recent-trade?category=spot&symbol=%s&limit=%d"
 )
 
@@ -32,6 +32,25 @@ func New(timeout time.Duration) *apiClient {
 
 func (c *apiClient) GetBtcRecentTrades(count int) ([]model.TradeInfo, error) {
 	url := fmt.Sprintf(baseURL, Bitcoin, count)
+	return c.getTradeInfo(url)
+}
+
+func (c *apiClient) GetEthRecentTrades(count int) ([]model.TradeInfo, error) {
+	url := fmt.Sprintf(baseURL, Ethereum, count)
+	return c.getTradeInfo(url)
+}
+
+func (c *apiClient) GetDogeRecentTrades(count int) ([]model.TradeInfo, error) {
+	url := fmt.Sprintf(baseURL, Doge, count)
+	return c.getTradeInfo(url)
+}
+
+func (c *apiClient) GetXrpRecentTrades(count int) ([]model.TradeInfo, error) {
+	url := fmt.Sprintf(baseURL, Xrp, count)
+	return c.getTradeInfo(url)
+}
+
+func (c *apiClient) getTradeInfo(url string) ([]model.TradeInfo, error) {
 	response, err := c.client.Get(url)
 	if err != nil {
 		return nil, err
@@ -45,17 +64,17 @@ func (c *apiClient) GetBtcRecentTrades(count int) ([]model.TradeInfo, error) {
 	if err != nil {
 		return nil, fmt.Errorf("json unmarshal error = %w", err)
 	}
-	return nil, nil
-}
+	if err := dto.Validate(); err != nil {
+		return nil, err
+	}
+	trades := make([]model.TradeInfo, len(dto.Result.List))
+	for i := range dto.Result.List {
+		tradeInfo, err := dto.Result.List[i].ConvertToInfo()
+		if err != nil {
+			return nil, err
+		}
+		trades[i] = tradeInfo
 
-func (c *apiClient) GetEthRecentTrades(count int) ([]model.TradeInfo, error) {
-	return nil, nil
-}
-
-func (c *apiClient) GetTetherRecentTrades(count int) ([]model.TradeInfo, error) {
-	return nil, nil
-}
-
-func (c *apiClient) GetXrpRecentTrades(count int) ([]model.TradeInfo, error) {
-	return nil, nil
+	}
+	return trades, nil
 }
