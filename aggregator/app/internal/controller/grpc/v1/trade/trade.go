@@ -13,6 +13,9 @@ func (s *server) Create(stream tradePb.TradeService_CreateServer) error {
 		if err == io.EOF {
 			return stream.SendAndClose(&tradePb.CreateResponse{})
 		}
+		if err != nil {
+			return err
+		}
 		fmt.Println(req)
 	}
 }
