@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/VrMolodyakov/crypto-comparing/bybit/internal/domain/currency/model"
+	"github.com/VrMolodyakov/crypto-comparing/binance/internal/domain/currency/model"
 )
 
 const (
@@ -15,7 +15,7 @@ const (
 	Ethereum string = "ETHUSDT"
 	Doge     string = "DOGEUSDT"
 	Xrp      string = "XRPUSDT"
-	baseURL  string = "https://api.bybit.com/v5/market/recent-trade?category=spot&symbol=%s&limit=%d"
+	baseURL  string = "https://api.binance.com/api/v3/trades?symbol=%s&limit=%d"
 )
 
 type apiClient struct {
@@ -60,17 +60,17 @@ func (c *apiClient) getTradeInfo(url string, name string) ([]model.TradeInfo, er
 	if err != nil {
 		return nil, fmt.Errorf("cannot read response body due to %w", err)
 	}
-	var dto Trades
-	err = json.Unmarshal(body, &dto)
+	var tradesDto Trades
+	err = json.Unmarshal(body, &tradesDto)
 	if err != nil {
 		return nil, fmt.Errorf("json unmarshal error = %w", err)
 	}
-	if err := dto.Validate(); err != nil {
+	if err := tradesDto.Validate(); err != nil {
 		return nil, err
 	}
-	trades := make([]model.TradeInfo, len(dto.Result.List))
-	for i := range dto.Result.List {
-		tradeInfo, err := dto.Result.List[i].ConvertToInfo()
+	trades := make([]model.TradeInfo, len(tradesDto))
+	for i := range tradesDto {
+		tradeInfo, err := tradesDto[i].ConvertToInfo()
 		if err != nil {
 			return nil, err
 		}

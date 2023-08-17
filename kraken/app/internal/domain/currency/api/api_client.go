@@ -37,6 +37,7 @@ func (c *apiClient) GetBtcRecentTrades(count int) ([]model.TradeInfo, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer response.Body.Close()
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		return nil, fmt.Errorf("cannot read response body due to %w", err)
@@ -71,6 +72,7 @@ func (c *apiClient) GetEthRecentTrades(count int) ([]model.TradeInfo, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer response.Body.Close()
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		return nil, fmt.Errorf("cannot read response body due to %w", err)
@@ -105,6 +107,7 @@ func (c *apiClient) GetDogeRecentTrades(count int) ([]model.TradeInfo, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer response.Body.Close()
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		return nil, fmt.Errorf("cannot read response body due to %w", err)
@@ -127,7 +130,7 @@ func (c *apiClient) GetDogeRecentTrades(count int) ([]model.TradeInfo, error) {
 		if err != nil {
 			return nil, fmt.Errorf("cannot convert to model due to = %w", err)
 		}
-		trade.Name = "Tether"
+		trade.Name = "Doge"
 		trades = append(trades, trade)
 	}
 	return trades, nil
@@ -139,6 +142,7 @@ func (c *apiClient) GetXrpRecentTrades(count int) ([]model.TradeInfo, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer response.Body.Close()
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		return nil, fmt.Errorf("cannot read response body due to %w", err)

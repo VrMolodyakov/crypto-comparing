@@ -1,6 +1,9 @@
 go 1.19
 
 use (
-	./kraken/app
+	./aggregator/app
+	./binance/app
 	./bybit/app
+	./kraken/app
+	./kucoin/app
 )

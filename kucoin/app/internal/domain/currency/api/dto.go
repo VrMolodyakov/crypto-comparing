@@ -5,31 +5,35 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/VrMolodyakov/crypto-comparing/bybit/internal/domain/currency/model"
+	"github.com/VrMolodyakov/crypto-comparing/kucoin/internal/domain/currency/model"
 )
 
 const (
-	BUY  = "Buy"
-	SELL = "Sell"
+	okLowerCode = 200000
+	okUpperCode = 260210
+	BUY         = "buy"
+	SELL        = "sell"
 )
 
 type Trades struct {
-	Result struct {
-		Category string         `json:"category"`
-		List     []TradeContent `json:"list"`
-	} `json:"result"`
+	Code string         `json:"code"`
+	Data []TradeContent `json:"data"`
 }
 
 type TradeContent struct {
 	Price string `json:"price"`
 	Size  string `json:"size"`
 	Side  string `json:"side"`
-	Time  string `json:"time"`
+	Time  int64  `json:"time"`
 }
 
 func (t *Trades) Validate() error {
-	if len(t.Result.List) == 0 {
-		return errors.New("trades is empty")
+	code, err := strconv.Atoi(t.Code)
+	if err != nil {
+		return err
+	}
+	if code < okLowerCode || code >= okUpperCode {
+		return errors.New(t.Code)
 	}
 	return nil
 }
@@ -43,15 +47,11 @@ func (t *TradeContent) ConvertToInfo() (model.TradeInfo, error) {
 	if err != nil {
 		return model.TradeInfo{}, err
 	}
-	timestamp, err := strconv.Atoi(t.Time)
-	if err != nil {
-		return model.TradeInfo{}, err
-	}
 	return model.TradeInfo{
 		Price:     price,
 		Size:      volume,
 		Buy:       t.Side == BUY,
 		Sell:      t.Side == SELL,
-		Timestamp: time.UnixMilli(int64(timestamp)),
+		Timestamp: time.Unix(0, t.Time),
 	}, nil
 }

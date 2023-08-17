@@ -7,15 +7,16 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/VrMolodyakov/crypto-comparing/bybit/internal/domain/currency/model"
+	"github.com/VrMolodyakov/crypto-comparing/kucoin/internal/domain/currency/model"
 )
 
 const (
-	Bitcoin  string = "BTCUSDT"
-	Ethereum string = "ETHUSDT"
-	Doge     string = "DOGEUSDT"
-	Xrp      string = "XRPUSDT"
-	baseURL  string = "https://api.bybit.com/v5/market/recent-trade?category=spot&symbol=%s&limit=%d"
+	Bitcoin  string = "BTC"
+	USDT     string = "USDT"
+	Ethereum string = "ETH"
+	Doge     string = "DOGE"
+	Xrp      string = "XRP"
+	baseURL  string = "https://api.kucoin.com/api/v1/market/histories?symbol=%s-%s"
 )
 
 type apiClient struct {
@@ -30,23 +31,23 @@ func New(timeout time.Duration) *apiClient {
 	}
 }
 
-func (c *apiClient) GetBtcRecentTrades(count int) ([]model.TradeInfo, error) {
-	url := fmt.Sprintf(baseURL, Bitcoin, count)
+func (c *apiClient) GetBtcRecentTrades() ([]model.TradeInfo, error) {
+	url := fmt.Sprintf(baseURL, Bitcoin, USDT)
 	return c.getTradeInfo(url, "Bitcoin")
 }
 
-func (c *apiClient) GetEthRecentTrades(count int) ([]model.TradeInfo, error) {
-	url := fmt.Sprintf(baseURL, Ethereum, count)
+func (c *apiClient) GetEthRecentTrades() ([]model.TradeInfo, error) {
+	url := fmt.Sprintf(baseURL, Ethereum, USDT)
 	return c.getTradeInfo(url, "Ethereum")
 }
 
-func (c *apiClient) GetDogeRecentTrades(count int) ([]model.TradeInfo, error) {
-	url := fmt.Sprintf(baseURL, Doge, count)
+func (c *apiClient) GetDogeRecentTrades() ([]model.TradeInfo, error) {
+	url := fmt.Sprintf(baseURL, Doge, USDT)
 	return c.getTradeInfo(url, "Doge")
 }
 
-func (c *apiClient) GetXrpRecentTrades(count int) ([]model.TradeInfo, error) {
-	url := fmt.Sprintf(baseURL, Xrp, count)
+func (c *apiClient) GetXrpRecentTrades() ([]model.TradeInfo, error) {
+	url := fmt.Sprintf(baseURL, Xrp, USDT)
 	return c.getTradeInfo(url, "Xrp")
 }
 
@@ -68,9 +69,9 @@ func (c *apiClient) getTradeInfo(url string, name string) ([]model.TradeInfo, er
 	if err := dto.Validate(); err != nil {
 		return nil, err
 	}
-	trades := make([]model.TradeInfo, len(dto.Result.List))
-	for i := range dto.Result.List {
-		tradeInfo, err := dto.Result.List[i].ConvertToInfo()
+	trades := make([]model.TradeInfo, len(dto.Data))
+	for i := range dto.Data {
+		tradeInfo, err := dto.Data[i].ConvertToInfo()
 		if err != nil {
 			return nil, err
 		}

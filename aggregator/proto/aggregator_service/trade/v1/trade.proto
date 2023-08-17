@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package proto.aggregator_service.trade.v1;
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/VrMolodyakov/crypto-comparing/aggregator/gen/go/proto/aggregator_service/trade/v1;pb_trade";
+
+service TradeService {
+    rpc Create(stream CreateRequest) returns (CreateResponse) {}
+}
+ 
+message CreateRequest {
+    string name = 1;
+    double price = 2;
+    double size = 3;
+    google.protobuf.Timestamp timestamp = 4;
+    bool buy = 5;
+    bool sell = 6; 
+}
+ 
+message CreateResponse {
+}
