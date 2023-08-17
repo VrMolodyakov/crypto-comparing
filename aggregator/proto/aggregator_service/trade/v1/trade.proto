@@ -3,7 +3,7 @@ syntax = "proto3";
 package proto.aggregator_service.trade.v1;
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/VrMolodyakov/crypto-comparing/aggregator/gen/go/proto/aggregator_service/trade/v1;pb_trade";
+option go_package = "github.com/VrMolodyakov/crypto-comparing/aggregator/app/gen/go/proto/aggregator_service/trade/v1;pb_trade";
 
 service TradeService {
     rpc Create(stream CreateRequest) returns (CreateResponse) {}

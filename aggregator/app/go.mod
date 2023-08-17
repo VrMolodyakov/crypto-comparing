@@ -1,4 +1,4 @@
-module github.com/VrMolodyakov/crypto-comparing/aggregator
+module github.com/VrMolodyakov/crypto-comparing/aggregator/app
 
 go 1.19
 

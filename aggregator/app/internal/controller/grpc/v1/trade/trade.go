@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	tradePb "github.com/VrMolodyakov/crypto-comparing/aggregator/gen/go/proto/aggregator_service/trade/v1"
+	tradePb "github.com/VrMolodyakov/crypto-comparing/aggregator/app/gen/go/proto/aggregator_service/trade/v1"
 )
 
 func (s *server) Create(stream tradePb.TradeService_CreateServer) error {
